@@ -220,6 +220,9 @@
   .tw\:w-5 {
     width: calc(var(--tw-spacing) * 5);
   }
+  .tw\:w-fit {
+    width: fit-content;
+  }
   .tw\:w-full {
     width: 100%;
   }
@@ -228,6 +231,9 @@
   }
   .tw\:flex-shrink-0 {
     flex-shrink: 0;
+  }
+  .tw\:cursor-pointer {
+    cursor: pointer;
   }
   .tw\:snap-start {
     scroll-snap-align: start;
