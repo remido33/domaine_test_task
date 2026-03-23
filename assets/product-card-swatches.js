@@ -73,12 +73,14 @@ class PCard extends HTMLElement {
     const { price, comparePrice } = button.dataset;
     const priceEl = this.querySelector(".pcard__price");
     const comparePriceEl = this.querySelector(".pcard__compare-price");
+    const saleBadgeEl = this.querySelector(".pcard__badge");
 
     if (priceEl && price) priceEl.textContent = price;
     if (comparePriceEl) {
       comparePriceEl.hidden = !comparePrice;
       if (comparePrice) comparePriceEl.textContent = comparePrice;
     }
+    if (saleBadgeEl) saleBadgeEl.hidden = !comparePrice;
   }
 
   #updateLinks(button) {
