@@ -244,6 +244,9 @@
   .tw\:flex-col {
     flex-direction: column;
   }
+  .tw\:flex-wrap {
+    flex-wrap: wrap;
+  }
   .tw\:items-center {
     align-items: center;
   }
