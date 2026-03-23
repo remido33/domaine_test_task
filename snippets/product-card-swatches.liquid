@@ -36,7 +36,7 @@
         {% if swatch_index < max_swatches_shown %}
           <button
             type="button"
-            class="pcard__swatch tw:relative tw:rounded-full{% unless swatch_variant.available %} pcard__swatch--unavailable{% endunless %}{% if swatch_index == 0 %} active{% endif %}"
+            class="pcard__swatch cursor-pointer tw:relative tw:rounded-full{% unless swatch_variant.available %} pcard__swatch--unavailable{% endunless %}{% if swatch_index == 0 %} active{% endif %}"
             data-variant-url="{{ swatch_variant.url }}"
             data-swatch-index="{{ swatch_index }}"
             data-price="{{ swatch_variant.price | money }}"
