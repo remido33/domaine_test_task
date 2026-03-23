@@ -24,8 +24,10 @@ class PCard extends HTMLElement {
 
   connectedCallback() {
     this.addEventListener("click", this.#onClick);
-    this.#media?.addEventListener("mouseenter", this.#onMediaEnter);
-    this.#media?.addEventListener("mouseleave", this.#onMediaLeave);
+    if (window.matchMedia("(hover: hover)").matches) {
+      this.#media?.addEventListener("mouseenter", this.#onMediaEnter);
+      this.#media?.addEventListener("mouseleave", this.#onMediaLeave);
+    }
     this.#resizeObserver.observe(this);
     this.#syncHoverFromActive();
     this.#syncStripScroll();

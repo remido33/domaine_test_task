@@ -8,7 +8,7 @@
   assign swatch_index = 0
 %}
 
-<div class="tw:relative tw:z-20 tw:flex tw:items-center tw:gap-2">
+<div class="tw:relative tw:z-20 tw:flex tw:items-center tw:gap-2 flex-wrap">
   {% for product_option in product.options_with_values %}
     {% for option_value in product_option.values %}
       {% if option_value.swatch %}
