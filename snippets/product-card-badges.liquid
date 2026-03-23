@@ -1,0 +1,9 @@
+{%- doc -%}
+  @param {object} variant
+{%- enddoc -%}
+
+<div class="tw:flex tw:flex-col tw:gap-2 tw:items-start">
+  {% if variant.compare_at_price > variant.price %}
+    <span class="pcard__badge tw:text-base tw:border-product-badge-sale tw:text-product-badge-sale"> On sale </span>
+  {% endif %}
+</div>

@@ -1,0 +1,79 @@
+{%- doc -%}
+  @param {object} product
+  @param {number} [max_swatches] - Max swatches before overflow indicator (default: 6)
+{%- enddoc -%}
+
+{% liquid
+  assign max_swatches_shown = max_swatches | default: 6
+  assign swatch_index = 0
+%}
+
+<div class="tw:relative tw:z-20 tw:flex tw:items-center tw:gap-2">
+  {% for product_option in product.options_with_values %}
+    {% for option_value in product_option.values %}
+      {% if option_value.swatch %}
+        {% liquid
+          assign swatch_variant = option_value.variant
+          assign hover_media = null
+          assign color_name = option_value.name
+          assign color_handle = color_name | handleize
+          assign primary_id = swatch_variant.featured_media.id
+
+          for media in product.media
+            if media.id != primary_id and media.media_type == 'image'
+              if media.alt == color_name
+                assign hover_media = media.preview_image
+                break
+              elsif hover_media == null
+                assign src_handle = media.src | handleize
+                if src_handle contains color_handle
+                  assign hover_media = media.preview_image
+                endif
+              endif
+            endif
+          endfor
+        %}
+        {% if swatch_index < max_swatches_shown %}
+          <button
+            type="button"
+            class="pcard__swatch tw:relative tw:rounded-full{% unless swatch_variant.available %} pcard__swatch--unavailable{% endunless %}{% if swatch_index == 0 %} active{% endif %}"
+            data-variant-url="{{ swatch_variant.url }}"
+            data-swatch-index="{{ swatch_index }}"
+            data-price="{{ swatch_variant.price | money }}"
+            {% if swatch_variant.compare_at_price > swatch_variant.price %}
+              data-compare-price="{{ swatch_variant.compare_at_price | money }}"
+            {% endif %}
+            {% if hover_media %}
+              {% capture hover_srcset -%}
+                {{ hover_media | image_url: width: 300 }} 300w, {{ hover_media | image_url: width: 600 }} 600w, {{ hover_media | image_url: width: 900 }} 900w
+              {%- endcapture %}
+              data-hover-src="{{ hover_media | image_url: width: 600 }}"
+              data-hover-srcset="{{ hover_srcset | strip | escape }}"
+              data-hover-alt="{{ hover_media.alt | default: product.title | escape }}"
+            {% endif %}
+            aria-label="{% if swatch_variant.available %}{{ option_value.name | escape }}{% else %}{{ option_value.name | escape }} — {{ 'products.product.sold_out' | t }}{% endif %}"
+          >
+            <span
+              class="tw:relative tw:block tw:h-5 tw:w-5 tw:rounded-full"
+              {% if option_value.swatch.color != blank %}
+                style="background-color: {{ option_value.swatch.color }};{% if option_value.swatch.color == '#ffffff' %} border: 1px solid var(--tw-color-product-border);{% endif %}"
+              {% endif %}
+            >
+            </span>
+          </button>
+        {% endif %}
+        {% assign swatch_index = swatch_index | plus: 1 %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  {% if swatch_index > max_swatches_shown %}
+    {% assign overflow_count = swatch_index | minus: max_swatches_shown %}
+    <span
+      class="tw:text-base"
+      aria-label="{{ overflow_count }} additional colors"
+    >
+      +{{ overflow_count }}
+    </span>
+  {% endif %}
+</div>

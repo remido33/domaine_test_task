@@ -1,0 +1,76 @@
+{%- doc -%}
+  @param {object} product
+  @param {object} initial_image
+  @param {object} [initial_hover]
+  @param {object} variant
+  @param {number} [image_ratio] - Padding-bottom percentage for aspect ratio (default: 110)
+{%- enddoc -%}
+
+<a
+  class="pcard__media tw:border-product-border tw:bg-product-background"
+  href="{{ product.url }}"
+  style="padding-bottom: {{ image_ratio | default: 110 }}%;"
+>
+  <div
+    class="pcard__images tw:bg-product-background"
+    tabindex="-1"
+  >
+    {% assign swatch_index = 0 %}
+    {% for product_option in product.options_with_values %}
+      {% for option_value in product_option.values %}
+        {% if option_value.swatch %}
+          {% liquid
+            assign swatch_variant = option_value.variant
+            assign slide_media = swatch_variant.featured_media.preview_image
+            if slide_media == blank and swatch_variant.product.featured_media != blank
+              assign slide_media = swatch_variant.product.featured_media.preview_image
+            endif
+            if slide_media == blank and product.featured_image != blank
+              assign slide_media = product.featured_image
+            endif
+
+            assign media_loading = 'lazy'
+            if swatch_index == 0
+              assign media_loading = 'eager'
+            endif
+          %}
+          {% render 'product-card-media-slide',
+            image: slide_media,
+            index: swatch_index,
+            loading: media_loading,
+            product: product
+          %}
+          {% assign swatch_index = swatch_index | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+    {% if swatch_index == 0 %}
+      {% render 'product-card-media-slide', image: initial_image, index: 0, loading: 'lazy', product: product %}
+    {% endif %}
+  </div>
+
+  {% if initial_hover != blank %}
+    {% capture initial_hover_srcset -%}
+      {{ initial_hover | image_url: width: 300 }} 300w, {{ initial_hover | image_url: width: 600 }} 600w, {{ initial_hover | image_url: width: 900 }} 900w
+    {%- endcapture %}
+    <div
+      class="pcard__images-hover tw:bg-product-background tw:opacity-0"
+    >
+      <img
+        class="pcard__hover-img tw:absolute tw:inset-0"
+        src="{{ initial_hover | image_url: width: 600 }}"
+        srcset="{{ initial_hover_srcset | strip }}"
+        sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+        width="{{ initial_hover.width }}"
+        height="{{ initial_hover.height }}"
+        alt="{{ initial_hover.alt | default: product.title | escape }}"
+      >
+    </div>
+  {% endif %}
+
+  <div
+    class="tw:pointer-events-none tw:absolute tw:inset-5 tw:z-[2]"
+  >
+    {% render 'product-card-badges', variant: variant %}
+  </div>
+</a>

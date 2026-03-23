@@ -1,0 +1,20 @@
+{%- doc -%}
+  @param {object} image - preview_image
+  @param {object} product
+  @param {string} loading - eager | lazy
+{%- enddoc -%}
+
+<img
+  src="{{ image | image_url: width: 600 }}"
+  srcset="
+    {{ image | image_url: width: 300 }} 300w,
+    {{ image | image_url: width: 600 }} 600w,
+    {{ image | image_url: width: 900 }} 900w
+  "
+  sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+  alt="{{ image.alt | default: product.title | escape }}"
+  loading="{{ loading }}"
+  width="{{ image.width }}"
+  height="{{ image.height }}"
+  class="tw:absolute tw:inset-0"
+>

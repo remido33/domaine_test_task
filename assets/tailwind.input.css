@@ -1,0 +1,90 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import "tailwindcss" prefix(tw);
+
+@theme {
+  /* Fonts */
+  --font-sans: "Roboto", sans-serif;
+
+  /* Text sizes */
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1rem;
+  --text-sm--font-weight: 400;
+  --text-base--text-transform: none;
+  --text-base--text-wrap: normal;
+
+  --text-base: 1rem;
+  --text-base--line-height: 1.125rem;
+  --text-base--font-weight: 500;
+  --text-base--letter-spacing: 0;
+  --text-base--text-transform: none;
+  --text-base--text-wrap: normal;
+
+  /* Product card */
+  --color-product-foreground: #111111;
+  --color-product-background: #ffffff;
+  --color-product-border: #e8e8e8;
+  --radius-product: 0.625rem;
+  --color-product-accent: #0a4874;
+  --color-product-compare: #ff0000;
+  --color-product-badge-sale: #ff0000;
+  --color-product-swatch-unavailable: #dc2626;
+  --radius-product-badge: 1.625rem;
+}
+
+/* Shopify base overrides */
+
+.pcard__title {
+  @apply tw:line-clamp-1 tw:font-sans tw:no-underline;
+}
+
+.pcard__compare-price:not([hidden]) + .pcard__price {
+  @apply tw:text-product-compare;
+}
+
+.pcard__media img {
+  @apply tw:block tw:w-full tw:h-full tw:object-contain tw:object-center;
+}
+
+/* Tailwind components */
+
+@layer components {
+  .pcard {
+    @apply tw:flex tw:flex-col tw:gap-[0.9375rem] tw:h-full tw:min-h-0;
+  }
+
+  .pcard__body {
+    @apply tw:flex tw:flex-col tw:gap-1 tw:flex-1 tw:text-start;
+  }
+
+  .pcard__content {
+    @apply tw:flex tw:flex-col tw:gap-[0.9375rem] tw:max-w-[15.375rem];
+  }
+
+  .pcard__media {
+    @apply tw:relative tw:shrink-0 tw:w-full tw:overflow-hidden tw:rounded-product tw:border;
+  }
+
+  .pcard__images {
+    @apply tw:absolute tw:inset-0 tw:flex tw:min-h-0 tw:min-w-0 tw:flex-row tw:overflow-hidden;
+  }
+
+  .pcard__images-hover {
+    @apply tw:pointer-events-none tw:absolute tw:inset-0 tw:z-[1] tw:overflow-hidden;
+  }
+
+  .pcard__price-row {
+    @apply tw:flex tw:items-center tw:gap-2;
+  }
+
+  .pcard__swatch.active {
+    @apply tw:outline tw:outline-1 tw:outline-product-accent tw:outline-offset-2;
+  }
+
+  .pcard__swatch--unavailable::before {
+    @apply tw:content-[''] tw:absolute tw:left-1/2 tw:top-1/2 tw:w-full tw:h-[2px] tw:transform tw:-translate-x-1/2 tw:-translate-y-1/2 tw:rotate-[-45deg] tw:bg-product-swatch-unavailable tw:pointer-events-none tw:z-2;
+  }
+
+  .pcard__badge {
+    @apply tw:inline-block tw:rounded-product-badge tw:border tw:px-3 tw:py-1.5;
+  }
+}
